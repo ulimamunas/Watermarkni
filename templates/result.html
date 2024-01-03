@@ -4,20 +4,21 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Watermark Result</title>
+    <title>Watermarked Image Result</title>
   </head>
   <body>
-    <h1>Watermark Result</h1>
-
+    <h1>Watermarked Image Result</h1>
+    {% if filename %}
+    <img src="{{ url_for('serve_watermarkedImg', filename=filename)}}" alt="Watermarked Image" />
+    {% endif %}
     <p>Original Image: {{ watermarkedImage.original_image.filename }}</p>
-    <p>Watermark Image: {{ watermarkedImage.watermark.filename }}</p>
+    <p>Watermark: {{ watermarkedImage.watermark.filename }}</p>
+    <p>Created At: {{ watermarkedImage.created_at }}</p>
 
-    <img src="{{ url_for('static', filename=watermarked_model.filename) }}" alt="Watermarked Image" style="max-width: 100%" />
-
-    <p>
-      <a href="{{ url_for('download_result', filename=watermarked_model.filename) }}" download="{{ watermarked_model.filename }}">Download Watermarked Image</a>
-    </p>
-
-    <p><a href="{{ url_for('watermark') }}">Back to Watermark Form</a></p>
+    {% if watermarkedImage.user %}
+    <p>User: {{ watermarkedImage.user.username }}</p>
+    {% else %}
+    <p>User: Anonymous</p>
+    {% endif %}
   </body>
 </html>

@@ -28,7 +28,7 @@ class User(db.Model, UserMixin):
         # Misalnya, cek apakah ada data pengguna berdasarkan ID atau kondisi lain
         return True if self.id else False
     
-    def create_watermark_image(original, watermark, watermarked):
+    def create_watermark_image(original, watermark):
         originalImage = Image.open(original)
         watermarkImage = Image.open(watermark)
 
@@ -45,10 +45,7 @@ class User(db.Model, UserMixin):
 
         # Hapus saluran alpha untuk mengembalikan ke mode RGB
         watermarkedImage = watermarkedImage.convert('RGB')
-
-        # Simpan gambar yang telah diberi watermark
-        watermarkedImage.save(watermarked)
-
+        
         return watermarkedImage         
         
     

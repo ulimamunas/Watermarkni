@@ -3,10 +3,12 @@ from flask import render_template, redirect, url_for, flash, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import numpy as np
-from flask_login import login_user, current_user, login_required, login_manager
+from flask_login import login_user, current_user, login_required, login_manager, logout_user
 from models import *
 from flask_login import LoginManager
 import os
+import time
+import secrets
 
 # Inisialisasi LoginManager
 login_manager = LoginManager(app)
@@ -58,6 +60,15 @@ def signin():
         
     return render_template('signin.html', form=form)
 
+@app.route('/logout')
+@login_required
+def logout():
+    # Logout user menggunakan Flask-Login
+    logout_user()
+
+    flash('You have been logged out successfully!', 'success')
+    return redirect(url_for('home'))
+
 @app.route('/watermark' , methods=['GET', 'POST'])
 @login_required
 def watermark():
@@ -88,9 +99,6 @@ def watermark():
         original_file.save(original_path)
         watermark_file.save(watermark_path)
 
-        # Replace LSB of the original image with LSB of the watermark
-        watermarked_image = User.create_watermark_image(original_file, watermark_file, 'watermarked_image.jpg')
-
         # Save the images to the database
         original_model = MyImage(filename=original_filename, user_id=current_user.id)
         watermark_model = Watermark(filename=watermark_filename, user_id=current_user.id)
@@ -98,9 +106,15 @@ def watermark():
         db.session.add(watermark_model)
         db.session.commit()
 
-        # Save the watermarked image
-        watermarked_filename = f'tmp/watermarked_{original_filename}'
-        watermarked_image.save(watermarked_filename)
+        # Replace LSB of the original image with LSB of the watermark
+        watermarked_image_file = User.create_watermark_image(original_path, watermark_path)
+
+        # Generate a unique filename for the watermarked image
+        timestamp = int(time.time())
+        random_string = secrets.token_hex(8)
+        watermarked_filename = secure_filename(f"watermarked_{timestamp}_{random_string}.jpg")
+        watermarked_image_path = f'tmp/{watermarked_filename}'
+        watermarked_image_file.save(watermarked_image_path)
 
         # Save the watermarked image to the database
         watermarked_model = WatermarkedImage(
@@ -122,14 +136,19 @@ def result(filename):
     watermarkedImage = WatermarkedImage.query.filter_by(filename=filename).first()
 
     if watermarkedImage:
-        return render_template('result.html', watermarkedImage=watermarkedImage)
+        return render_template('result.html', watermarkedImage=watermarkedImage, filename=watermarkedImage.filename)
     else:
         # Handle the case where the watermarked image is not found
         return render_template('result_not_found.html')
 
+@app.route('/tmp/<path:filename>')
+def serve_watermarkedImg(filename):
+    return send_from_directory('tmp', filename)
+
 @app.route('/assets/<path:filename>')
 def serve_img(filename):
     return send_from_directory('assets', filename)
+
 
 if __name__ == '__main__':
     db.create_all()

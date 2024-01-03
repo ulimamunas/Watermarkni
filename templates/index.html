@@ -9,7 +9,7 @@
   <body class="bg-dominan">
     <!-- NAVBAR -->
     <nav>
-      <div class="bg-dominan flex justify-between items-center mx-auto py-3 px-36 border-b border-birucerah sticky top-0 overflow-hidden">
+      <div class="bg-dominan flex justify-between items-center mx-auto py-3 px-36 border-b border-birucerah sticky top-0">
         <a href="{{ url_for('home') }}" class="flex items-center">
           <img src="{{ url_for('serve_img', filename='logow.svg') }}" alt="" />
           <span class="font-body font-bold text-white text-2xl">atermarkni</span>
@@ -27,11 +27,15 @@
               <img src="{{ url_for('serve_img', filename='iconProfil.svg') }}" class="max-w-12 h-12" alt="Profile" />
             </div>
           </div>
-          <div class="absolute flex flex-col top-full right-0 z-10" id="profil-menu">
-            <!-- Active: "bg-gray-100", Not Active: "" -->
-            <a href="#" class="px-4 py-2 text-sm text-gray-700">Profile</a>
-            <a href="#" class="px-4 py-2 text-sm text-gray-700">Settings</a>
-            <a href="#" class="px-4 py-2 text-sm text-gray-700">Sign out</a>
+          <div class="absolute flex flex-col bg-white rounded-md top-3/4 mt-3 right-8 ms-32 z-50 hidden" id="profil-menu">
+            <div class="pt-5 pe-[70px] pb-4 ps-8 text-black hover:bg-slate-300 rounded-md">
+              <a href="#">Profile</a>
+            </div>
+            {% if current_user.is_authenticated %}
+            <div class="pt-5 pe-[70px] pb-4 ps-8 text-black hover:bg-slate-300 rounded-md">
+              <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+            {% endif %}
           </div>
           <script>
             function toggleProfileMenu() {
