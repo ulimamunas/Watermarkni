@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="static/css/main.css" />
+  </head>
+  <body class="bg-dominan">
+    <!-- NAVBAR -->
+    <nav class="bg-dominan border-b border-birucerah">
+      <div class="container bg-dominan flex justify-between items-center mx-auto py-3 px-36 border-b border-birucerah fixed">
+        <a href="{{ url_for('home') }}" class="flex items-center">
+          <img src="{{ url_for('serve_img', filename='logow.svg') }}" alt="" />
+          <span class="font-body font-bold text-white text-2xl">atermarkni</span>
+        </a>
+      </div>                                        
+    </nav>
+    <!-- Form Sign In -->
+    <form action="{{ url_for('signin') }}" method="post" class="flex-1 flex flex-col justify-center items-center font-montserrat bg-mungkinpink mt-28 mx-auto max-w-lg rounded-3xl gap-6" style="height: 630px">
+      <h1 class="text-4xl font-bold pb-14">Sign In</h1>
+      <div class="flex flex-col gap-3">
+        {{ form.hidden_tag() }}
+        <div class="flex flex-col gap-2">
+          <label for="username" class="font-bold text-xl">Username</label>
+          {{ form.username(class="w-96 h-14 px-5 rounded-3xl", placeholder="Enter your username") }} 
+        <div class="flex flex-col gap-2">
+          <label for="password" class="font-bold text-xl">Password</label>
+          {{ form.password(class="w-96 h-14 px-5 rounded-3xl", placeholder="Enter your password") }} 
+      </div>
+      <div class="text-base flex justify-start items-start gap-2">
+        <p>Don't have an account yet?</p>
+        <a href="{{ url_for('signup') }}" class="text-pink">Sign Up</a>
+      </div>
+      {{ form.submit(class="px-10 py-4 mt-20 bg-kuningoranye rounded-full font-bold") }}
+    </form>
+  </body>
+</html>

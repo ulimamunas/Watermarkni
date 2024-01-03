@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watermark</title>
+    <link rel="stylesheet" href="static/css/main.css" />
+  </head>
+  <body class="m-0 p-0">
+    <div class="flex">
+      <a href="{{ url_for('home') }}" class="px-6 py-4 mt-3 ms-5 bg-birulagi rounded-xl font-bold text-white font-montserrat"> < Back Home</a>
+    </div>
+    <form action="{{ url_for('watermark') }}" enctype="multipart/form-data" method="post" class="flex-1 flex flex-col justify-center gap-20 mt-7 max-w-screen-xl py-28 mx-auto rounded-3xl bg-mungkinpink font-montserrat">
+      <div class="flex items-center justify-center gap-60">
+        {{ form.hidden_tag() }}
+        <div class="flex flex-col gap-6 items-center">
+          <h1 class="font-bold text-3xl">Tambah Gambar</h1>
+          <img src="{{ url_for('serve_img', filename='logow.svg') }}" class="w-40" alt="" />
+          {{ form.original() }}
+        </div>
+        <div class="flex flex-col gap-6 items-center">
+          <h1 class="font-bold text-3xl">Tambah Watermark</h1>
+          <img src="{{ url_for('serve_img', filename='logow.svg') }}" class="w-40" alt="" />
+          {{ form.watermark() }}
+        </div>
+      </div>
+      <div class="flex justify-center mt-10">{{ form.submit(class="px-10 py-4 bg-birulagi rounded-xl max-w-fit text-white font-semibold") }}</div>
+    </form>
+  </body>
+</html>
