@@ -2,23 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Watermarked Image Result</title>
+    <title>Result</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
   </head>
-  <body>
-    <h1>Watermarked Image Result</h1>
+  <body class="bg-dominan">
     {% if filename %}
-    <img src="{{ url_for('serve_watermarkedImg', filename=filename)}}" alt="Watermarked Image" />
-    {% endif %}
-    <p>Original Image: {{ watermarkedImage.original_image.filename }}</p>
-    <p>Watermark: {{ watermarkedImage.watermark.filename }}</p>
-    <p>Created At: {{ watermarkedImage.created_at }}</p>
-
-    {% if watermarkedImage.user %}
-    <p>User: {{ watermarkedImage.user.username }}</p>
-    {% else %}
-    <p>User: Anonymous</p>
+    <div class="text-white font-montserrat">
+      <div class="flex">
+        <a href="{{ url_for('watermark') }}" class="px-6 py-4 mt-3 ms-5 bg-birulagi rounded-xl font-bold text-white font-montserrat"> < Back to Watermark</a>
+      </div>
+      <div class="flex items-center justify-center gap-[58px] my-[110px]">
+        <div class="flex flex-col items-center gap-[24px]">
+          <h1 class="font-bold text-3xl">Watermark Results</h1>
+          <p class="text-xl text-center">Hooray! Your image is officially watermarked. <br />Express your creativity with confidence, <br />knowing that it is uniquely yours.</p>
+          <a href="{{ url_for('serve_watermarkedImg', filename=filename)}}" download="mywatermark.jpg" class="px-6 py-4 mt-3 ms-5 bg-pink rounded-xl font-bold text-white font-montserrat">Download Here</a>
+        </div>
+        <div class="w-[595px] h-[463px]">
+          <img src="{{ url_for('serve_watermarkedImg', filename=filename)}}" alt="Watermarked Image" class="w-full h-full rounded-lg object-contain" />
+        </div>
+      </div>
+    </div>
     {% endif %}
   </body>
 </html>

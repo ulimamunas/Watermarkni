@@ -8,8 +8,8 @@
   </head>
   <body class="bg-dominan">
     <!-- NAVBAR -->
-    <nav>
-      <div class="bg-dominan flex justify-between items-center mx-auto py-3 px-36 border-b border-birucerah sticky top-0">
+    <nav class="">
+      <div class="bg-dominan flex justify-between items-center mx-auto py-3 px-36 border-b border-birucerah fixed top-0 w-full z-50">
         <a href="{{ url_for('home') }}" class="flex items-center">
           <img src="{{ url_for('serve_img', filename='logow.svg') }}" alt="" />
           <span class="font-body font-bold text-white text-2xl">atermarkni</span>
@@ -18,38 +18,38 @@
           <a href="#home">Home</a>
           <a href="#about">About</a>
           <a href="#help">Help</a>
-          {% if show_signup_button %}
-          <a href="{{ url_for('signup') }}" class="px-10 py-4 bg-biru rounded-xl">Sign Up</a>
+          {% if not current_user.is_authenticated %}
+          <a href="{{ url_for('signin') }}" class="px-10 py-4 bg-biru rounded-xl">Sign In</a>
           {% else %}
           <!-- Display user profile image -->
-          <div class="relative">
-            <div onclick="toggleProfileMenu()">
-              <img src="{{ url_for('serve_img', filename='iconProfil.svg') }}" class="max-w-12 h-12" alt="Profile" />
+          <div>
+            <div class="relative">
+              <div onclick="toggleProfileMenu()">
+                <img src="{{ url_for('serve_img', filename='iconProfil.svg') }}" class="max-w-12 h-12" alt="Profile" />
+              </div>
+            </div>
+            <div class="absolute flex flex-col bg-white rounded-md top-3/4 mt-3 right-8 ms-32 z-50 hidden" id="profil-menu">
+              <div class="pt-5 pe-[70px] pb-4 ps-8 text-black hover:bg-slate-300 rounded-md">
+                <a href="#">Profile</a>
+              </div>
+              <div class="pt-5 pe-[70px] pb-4 ps-8 text-black hover:bg-slate-300 rounded-md">
+                <a href="{{ url_for('logout') }}">Logout</a>
+              </div>
             </div>
           </div>
-          <div class="absolute flex flex-col bg-white rounded-md top-3/4 mt-3 right-8 ms-32 z-50 hidden" id="profil-menu">
-            <div class="pt-5 pe-[70px] pb-4 ps-8 text-black hover:bg-slate-300 rounded-md">
-              <a href="#">Profile</a>
-            </div>
-            {% if current_user.is_authenticated %}
-            <div class="pt-5 pe-[70px] pb-4 ps-8 text-black hover:bg-slate-300 rounded-md">
-              <a href="{{ url_for('logout') }}">Logout</a>
-            </div>
-            {% endif %}
-          </div>
+          {% endif %}
           <script>
             function toggleProfileMenu() {
               const profilMenu = document.getElementById("profil-menu");
               profilMenu.classList.toggle("hidden");
             }
           </script>
-          {% endif %}
         </div>
       </div>
     </nav>
 
     <!-- HOME PAGE -->
-    <div id="home" class="flex items-center px-36 mt-28 justify-between top-0">
+    <div id="home" class="flex items-center px-36 pt-[160px] justify-between top-0 z-0">
       <div class="font-montserrat text-white flex flex-col gap-4 items-start mb-28">
         <h1 class="text-4xl font-bold">Stop Pencurian Karya</h1>
         <p class="text-xl">
@@ -58,24 +58,26 @@
         </p>
         <a href="{{ url_for('watermark') }}" class="px-10 py-4 bg-birulagi rounded-xl font-bold">Buat watermark</a>
       </div>
-      <img src="{{ url_for('serve_img', filename='iconw.svg') }}" alt="" class="w-525 h-493" />
+      <div class="w-[625px] h-[593px]">
+        <img src="{{ url_for('serve_img', filename='iconw.svg') }}" alt="" class="w-full h-full object-center" />
+      </div>
     </div>
 
     <!-- ABOUT PAGE -->
-    <div id="about" class="flex items-center px-36 pt-32 mb-4 justify-between gap-6">
-      <img src="{{ url_for('serve_img', filename='iconA.svg') }}" alt="" class="w-525 h-493" />
+    <div id="about" class="flex items-center px-36 pt-[170px] justify-between gap-6">
+      <img src="{{ url_for('serve_img', filename='iconA.svg') }}" alt="" class="w-[565px] h-[493px]" />
       <div class="font-montserrat text-white flex flex-col gap-4 items-start mb-28">
         <h1 class="text-4xl font-bold ms-9">Who We Are?</h1>
         <img src="{{ url_for('serve_img', filename='lineA.svg') }}" alt="" class="" />
         <p class="text-xl ms-7">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. <br />Animi aspernatur debitis officiis soluta exercitationem dolore officia eligendi quaerat, beatae in? Voluptate quisquam a at perferendis voluptas minima facere,
-          delectus eaque dolorum libero eum amet sunt. Rem eum fuga dicta totam?
+          We are a dedicated team comitted to providing cutting-edge watemarking solutions for creators, photographers, and businesses. With innovative technology and a focus on security, we offer an easy-to-use watermark generator service
+          to protect your digital artwork. Join us and leave a unique mark on each of your images, creating an unmistakable visual identity.
         </p>
       </div>
     </div>
 
     <!-- HELP PAGE -->
-    <div id="help" class="mx-36 pt-32 text-white">
+    <div id="help" class="px-36 pt-52 pb-64 text-white">
       <h1 class="font-bold text-4xl mb-6">How Does It Work?</h1>
       <div class="grid grid-cols-3 gap-16">
         <div>
@@ -84,11 +86,7 @@
             <img src="{{ url_for('serve_img', filename='iconH1.svg') }}" alt="" />
             <p class="font-bold text-lg">Import Photos</p>
           </div>
-          <p class="text-lg mt-3">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora veniam deleniti eveniet unde odio eaque distinctio dignissimos dolorum minus, reprehenderit porro, minima fugiat expedita soluta sunt inventore saepe
-            ratione exercitationem pariatur officia veritatis accusamus eum. Iusto ex magni amet perferendis blanditiis ipsam nulla rerum accusamus porro ipsum, libero nemo molestiae esse quisquam fugiat ullam quidem reprehenderit hic
-            facilis dolor architecto maxime rem dolorem. Nostrum iusto molestias ipsum quaerat, provident aliquam eligendi quae modi repellendus?
-          </p>
+          <p class="text-lg mt-3">You can click on "Select Files" and pick the image from your computer. When the new dialog window opens, choose photos to upload.</p>
         </div>
         <div>
           <h1 class="font-bold text-3xl mb-6">Step 2</h1>
@@ -96,11 +94,7 @@
             <img src="{{ url_for('serve_img', filename='iconH2.svg') }}" alt="" />
             <p class="font-bold text-lg">Add Watermark</p>
           </div>
-          <p class="text-lg mt-3">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora veniam deleniti eveniet unde odio eaque distinctio dignissimos dolorum minus, reprehenderit porro, minima fugiat expedita soluta sunt inventore saepe
-            ratione exercitationem pariatur officia veritatis accusamus eum. Iusto ex magni amet perferendis blanditiis ipsam nulla rerum accusamus porro ipsum, libero nemo molestiae esse quisquam fugiat ullam quidem reprehenderit hic
-            facilis dolor architecto maxime rem dolorem. Nostrum iusto molestias ipsum quaerat, provident aliquam eligendi quae modi repellendus?
-          </p>
+          <p class="text-lg mt-3">In our watermark maker, you can upload your logo files directly from your computer.</p>
         </div>
         <div>
           <h1 class="font-bold text-3xl mb-6">Step 3</h1>
@@ -108,16 +102,16 @@
             <img src="{{ url_for('serve_img', filename='iconH3.svg') }}" alt="" />
             <p class="font-bold text-lg">Export Watermarked Copies</p>
           </div>
-          <p class="text-lg mt-3">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam tempora veniam deleniti eveniet unde odio eaque distinctio dignissimos dolorum minus, reprehenderit porro, minima fugiat expedita soluta sunt inventore saepe
-            ratione exercitationem pariatur officia veritatis accusamus eum. Iusto ex magni amet perferendis blanditiis ipsam nulla rerum accusamus porro ipsum, libero nemo molestiae esse quisquam fugiat ullam quidem reprehenderit hic
-            facilis dolor architecto maxime rem dolorem. Nostrum iusto molestias ipsum quaerat, provident aliquam eligendi quae modi repellendus?
-          </p>
+          <p class="text-lg mt-3">Here, you have the ability to pick the format and quality of your watermarked pictures. By clicking on the "Generate" button, you'll start the watermarking process.</p>
         </div>
       </div>
     </div>
 
     <!-- FOOTER -->
-    <footer class="px-36 pt-52"></footer>
+    <footer class="px-36 py-8 text-white bg-dominan border-t border-birucerah">
+      <div class="flex justify-center items-center">
+        <p class="text-lg">&copy; 2024 Watermarkni. All rights reserved.</p>
+      </div>
+    </footer>
   </body>
 </html>

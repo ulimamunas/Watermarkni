@@ -69,6 +69,11 @@ def logout():
     flash('You have been logged out successfully!', 'success')
     return redirect(url_for('home'))
 
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
+
 @app.route('/watermark' , methods=['GET', 'POST'])
 @login_required
 def watermark():
@@ -140,6 +145,7 @@ def result(filename):
     else:
         # Handle the case where the watermarked image is not found
         return render_template('result_not_found.html')
+        
 
 @app.route('/tmp/<path:filename>')
 def serve_watermarkedImg(filename):
