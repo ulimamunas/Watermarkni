@@ -32,7 +32,7 @@ def signup():
         # Hash the password before saving it to the database
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
 
-        new_user = User(username=form.username.data, password=hashed_password)
+        new_user = User(name=form.name.data, username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         flash('Account created successfully! You will now be redirected to the sign-in page.', 'success')
@@ -72,7 +72,7 @@ def logout():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    return render_template('profile.html', user=current_user)
 
 @app.route('/watermark' , methods=['GET', 'POST'])
 @login_required
