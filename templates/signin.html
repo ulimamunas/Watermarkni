@@ -9,7 +9,7 @@
   <body class="bg-dominan">
     <!-- NAVBAR -->
     <nav class="bg-dominan border-b border-birucerah">
-      <div class="container bg-dominan flex justify-between items-center mx-auto py-3 px-36 border-b border-birucerah fixed">
+      <div class="container bg-dominan flex mx-auto py-3 px-36 border-b border-birucerah fixed">
         <a href="{{ url_for('home') }}" class="flex items-center">
           <img src="{{ url_for('serve_img', filename='logow.svg') }}" alt="" />
           <span class="font-body font-bold text-white text-2xl">atermarkni</span>
@@ -17,16 +17,18 @@
       </div>                                        
     </nav>
     <!-- Form Sign In -->
-    <form action="{{ url_for('signin') }}" method="post" class="flex-1 flex flex-col justify-center items-center font-montserrat bg-mungkinpink mt-28 mx-auto max-w-lg rounded-3xl gap-6" style="height: 630px">
+    <form action="{{ url_for('signin') }}" method="post" class="flex flex-col justify-center items-center font-montserrat bg-mungkinpink mt-28 mx-auto max-w-lg rounded-3xl gap-6" style="height: 630px">
       <h1 class="text-4xl font-bold pb-14">Sign In</h1>
       <div class="flex flex-col gap-3">
         {{ form.hidden_tag() }}
         <div class="flex flex-col gap-2">
           <label for="username" class="font-bold text-xl">Username</label>
           {{ form.username(class="w-96 h-14 px-5 rounded-3xl", placeholder="Enter your username") }} 
+        </div>
         <div class="flex flex-col gap-2">
           <label for="password" class="font-bold text-xl">Password</label>
           {{ form.password(class="w-96 h-14 px-5 rounded-3xl", placeholder="Enter your password") }} 
+        </div>
       </div>
       <div class="text-base flex justify-start items-start gap-2">
         <p>Don't have an account yet?</p>

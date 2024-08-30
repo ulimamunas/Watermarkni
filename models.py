@@ -29,25 +29,33 @@ class User(db.Model, UserMixin):
         # Misalnya, cek apakah ada data pengguna berdasarkan ID atau kondisi lain
         return True if self.id else False
     
-    def create_watermark_image(original, watermark):
-        originalImage = Image.open(original)
-        watermarkImage = Image.open(watermark)
+    def create_watermark_image(original, watermark, watermark_size_percent=20):
+        originalImage = Image.open(original) # Membuka gambar dari file
+        watermarkImage = Image.open(watermark) # Membuka gambar dari file
 
-        # Pastikan kedua gambar memiliki mode dan ukuran yang sama
+        # Diubah ke mode RGBA (red, green, blue, alpha channel atau saluran transparan)
+        # Alpha channel ini yang memungkinkan kita buat lapisan di atas gambar lain (watermark)
         watermarkImage = watermarkImage.convert('RGBA')
         originalImage = originalImage.convert('RGBA')
 
+        # Resize watermark sesuai dengan persentase yang diinginkan
+        watermark_size = (
+            int(originalImage.size[0] * watermark_size_percent / 100), # Ambil lebar gambar, dikalikan dengan 20%, menghasilkan ukuran watermark baru
+            int(originalImage.size[1] * watermark_size_percent / 100) # Ambil tinggi, dikalikan dengan 20%, menghasilkan ukuran watermark baru
+        )
+        watermarkImage = watermarkImage.resize(watermark_size) # Resize watermark (logo)
+
         # Buat gambar RGBA kosong untuk watermark
-        watermarkedImage = Image.new('RGBA', originalImage.size)
+        watermarkedImage = Image.new('RGBA', originalImage.size) # Dengan mode RGBA dan ukuran sama dengan gambar asli
 
         # Gabungkan gambar asli dan watermark
-        watermarkedImage.paste(originalImage, (0, 0))
-        watermarkedImage.paste(watermarkImage, (0, 0), mask=watermarkImage)
+        watermarkedImage.paste(originalImage, (0, 0)) # Menyisipkan gambar asli ke dalam watermarkedImage di (0, 0)
+        watermarkedImage.paste(watermarkImage, (0, 0), mask=watermarkImage) # Menyisipkan gambar watermark ke dalam watermarkedImage di (0, 0), gambar watermark ditempatkan di atas gambar asli
 
         # Hapus saluran alpha untuk mengembalikan ke mode RGB
         watermarkedImage = watermarkedImage.convert('RGB')
         
-        return watermarkedImage         
+        return watermarkedImage
         
     
 class MyImage(db.Model):
